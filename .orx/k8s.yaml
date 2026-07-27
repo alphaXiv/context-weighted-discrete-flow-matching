@@ -1,0 +1,23 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: cwdfm-{{ORX_RUN}}
+spec:
+  backoffLimit: 0
+  activeDeadlineSeconds: 39600
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: reproduce
+          image: pytorch/pytorch:2.7.1-cuda12.8-cudnn9-runtime
+          command: ["bash", "-c", "$ORX_SCRIPT"]
+          resources:
+            requests:
+              nvidia.com/gpu: "1"
+              cpu: "8"
+              memory: 32Gi
+            limits:
+              nvidia.com/gpu: "1"
+              cpu: "8"
+              memory: 32Gi
