@@ -6,7 +6,7 @@
   "steps": 25000,
   "batch_size": 512,
   "learning_rate": 0.00003,
-  "min_learning_rate": 0.0000003,
+  "min_learning_rate": 3E-7,
   "warmup_steps": 1000,
   "weight_decay": 0.01,
   "d_model": 384,
@@ -18,9 +18,16 @@
   "validation_size": 10000,
   "eval_samples": 1024,
   "eval_batch_size": 256,
-  "nfe_values": [8, 16, 32, 64, 128, 256],
+  "nfe_values": [
+    8,
+    16,
+    32,
+    64,
+    128,
+    256
+  ],
   "neighbor_radius": 1,
   "neighbor_scale": 4.0,
   "entropy_scale": 7.0,
-  "temperature": 1.0
+  "temperature": 0.9
 }
