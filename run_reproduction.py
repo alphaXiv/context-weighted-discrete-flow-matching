@@ -134,7 +134,6 @@ class DFMTransformer(nn.Module):
         self.apply(self._init_weights)
         nn.init.normal_(self.position, mean=0.0, std=0.02)
 
-    
     def _init_weights(self, module: nn.Module) -> None:
         if isinstance(module, (nn.Linear, nn.Embedding)):
             nn.init.normal_(module.weight, mean=0.0, std=0.02)
