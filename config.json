@@ -29,5 +29,5 @@
   "neighbor_radius": 1,
   "neighbor_scale": 4.0,
   "entropy_scale": 7.0,
-  "temperature": 1.0
+  "temperature": 1.2
 }
