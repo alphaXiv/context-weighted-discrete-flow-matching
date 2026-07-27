@@ -21,7 +21,9 @@ import numpy as np
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from rdkit import Chem
+from rdkit import Chem, RDLogger
+
+RDLogger.DisableLog("rdApp.*")
 
 
 DATA_URL = "https://deepchemdata.s3-us-west-1.amazonaws.com/datasets/gdb9.tar.gz"
@@ -129,9 +131,21 @@ class DFMTransformer(nn.Module):
         self.norm = nn.LayerNorm(d)
         self.head = nn.Linear(d, vocab, bias=False)
         self.head.weight = self.token.weight
+        self.apply(self._init_weights)
+        nn.init.normal_(self.position, mean=0.0, std=0.02)
+
+    
+    def _init_weights(self, module: nn.Module) -> None:
+        if isinstance(module, (nn.Linear, nn.Embedding)):
+            nn.init.normal_(module.weight, mean=0.0, std=0.02)
+            if isinstance(module, nn.Linear) and module.bias is not None:
+                nn.init.zeros_(module.bias)
+        elif isinstance(module, nn.LayerNorm):
+            nn.init.ones_(module.weight)
+            nn.init.zeros_(module.bias)
 
     def forward(self, x: torch.Tensor, t: torch.Tensor) -> torch.Tensor:
-        h = self.token(x) + self.position + self.time(t[:, None])
+        h = self.token(x) + self.position + self.time(t[:, None])[:, None, :]
         return self.head(self.norm(self.blocks(h)))
 
 
